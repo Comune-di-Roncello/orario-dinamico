@@ -1,0 +1,33 @@
+.bluitalia {
+  background-color: #0060df;
+}
+
+.bluitalia {
+  color: white;
+}
+.stemma {
+  height: 75px;
+}
+
+.header{
+    width: 100%;
+}
+
+.dimensionefissa{
+    height: 1920px;
+    width: 1080px;
+}
+
+.ruota {
+    height: 1080px;
+    width: 1920px;
+    writing-mode: vertical-rl;
+}
+
+.titolo {
+    padding-left: 3rem;
+}
+
+.newlinebadge {
+    white-space: collapse;
+}
