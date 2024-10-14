@@ -32,10 +32,10 @@
       <h1 class="display-1 d-flex py-3"><strong>Uffici ora aperti al pubblico:</strong></h1>
       <hr>
       <div class="container">
-        {% for office in open_today %}
+        {% for name, data in open_today.items %}
         <div class="row py-2">
-          <div class="col-7"><h1 class="display-3">{{office.name}}</h1></div>
-          <div class="col-5"><h1 class="display-3"><span class="badge newlinebadge text-bg-{{ office.badge }}">{{office.text}}</span></h1></div>
+          <div class="col-7"><h1 class="display-3">{{name}}</h1></div>
+          <div class="col-5"><h1 class="display-3"><span class="badge newlinebadge text-bg-{{ data.badge }}">{{data.text}}</span></h1></div>
         </div>
         {% endfor %}
       </div>
@@ -46,13 +46,12 @@
       <h1 class="display-1 d-flex py-3"><strong>Prossime aperture:</strong></h1>
       <hr>
       <div class="container">
+        {% for office in next_open %}
         <div class="row py-2">
           <div class="col-7"><h1 class="display-3">Assistente sociale</h1></div>
           <div class="col-5"><h1 class="display-3"><span class="badge newlinebadge text-bg-info">Domani</span> 9-11</h1></div>
         </div>
-        <div class="row py-2">
-          <div class="col-7"><h1 class="display-3">SUAP, SUE, SCGESEP</h1></div>
-          <div class="col-5"><h1 class="display-3"><span class="badge newlinebadge text-bg-info">Mercoledì</span> 11-11:02</h1></div>
+        {% endfor %}
         </div>
       </div>
     </div>
