@@ -6,10 +6,19 @@ from . import models
 
 from datetime import datetime as dt
 
+DAY_MAPPINGS = [
+    "lunedì",
+    "martedì",
+    "mercoledì",
+    "giovedì",
+    "venerdì",
+    "sabato",
+    "domenica"
+]
+
 # Create your views here.
 def home(request):
     #Lunedì 0 domenica 6
-    day_of_week = 1
     day_of_week = dt.today().weekday()
     time_now = dt.now().time()
     now = time_now.hour*60+time_now.minute
@@ -97,7 +106,24 @@ def home(request):
     ))
 
     filtered_next_week = open_next_week.exclude(fkufficio__pkid__in=Subquery(open_this_week.values('fkufficio__pkid')))
-
     output_openings = filtered_next_week.union(open_this_week, all=True)
 
-    return render(request, "webpage/index.html", context = {"open_today": open_today, "next_open": output_openings})
+    next_open = {}
+
+    for opening in output_openings:
+        if opening.day_of_week == day_of_week+1:
+            next_open.update({
+                opening.fkufficio.name: {
+                    "day": "domani",
+                    "open_time": opening.time_start.strftime("%H:%M")
+                }
+            })
+        else:
+            next_open.update({
+                opening.fkufficio.name: {
+                    "day": DAY_MAPPINGS[opening.day_of_week],
+                    "open_time": opening.time_start.strftime("%H:%M")
+                }
+            })
+
+    return render(request, "webpage/index.html", context = {"open_today": open_today, "next_open": next_open})
