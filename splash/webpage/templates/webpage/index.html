@@ -1,4 +1,5 @@
 {% load static %}
+<!doctype html>
 <html charset="UTF-8" class="dimensionefissa">
 
 <head>
@@ -14,20 +15,22 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap"
     rel="stylesheet">
+
+  <meta name="viewport" content="height=1920, width=1080">
+  <meta http-equiv="refresh" content="20">
 </head>
 
 <body>
   <div class="header bluitalia">
     <header class="d-flex justify-content-center py-3">
       <img src="{% static 'webpage/Roncello-Stemma.svg' %}" class="stemma align-middle" />
-      <p class="my-auto px-3 fs-1 align-middle">Comune di Roncello</p>
+      <h1 class="my-auto px-3 align-middle display-2">Comune di Roncello</h1>
     </header>
   </div>
 
   {% if open_today|length > 0 %}
   <div class="container pt-4 px-4">
     <h1 class="display-1 d-flex py-3"><strong>Uffici ora aperti al pubblico:</strong></h1>
-    <hr>
     <div class="container">
       {% for name, data in open_today.items %}
       <div class="row py-2">
@@ -43,22 +46,21 @@
   </div>
   {% else%}
   <div class="container pt-4 px-4">
-    <h1 class="display-1 d-flex py-3"><strong>Tutti gli uffici sono chiusi</strong></h1>
+    <h1 class="display-1 d-flex py-3" style="text-align: center;"><strong>Tutti gli uffici sono chiusi al pubblico</strong></h1>
     <hr>
   </div>
   {% endif %}
 
   <div class="container pt-4 px-4">
-    <h1 class="display-1 d-flex py-3"><strong>Prossime aperture:</strong></h1>
-    <hr>
+    <h2 class="display-3 d-flex py-3"><strong>Prossime aperture:</strong></h2>
     <div class="container">
       {% for name, data in next_open.items %}
       <div class="row py-2">
         <div class="col-7">
-          <h1 class="display-3">{{ name }}</h1>
+          <h1 class="display-5">{{ name }}</h1>
         </div>
         <div class="col-5">
-          <h1 class="display-3"><span class="badge newlinebadge text-bg-info">{{ data.day }} alle {{ data.open_time }}</span></h1>
+          <h1 class="display-6"><span class="badge newlinebadge text-bg-info">{{ data.day }} alle {{ data.open_time }}</span></h1>
         </div>
       </div>
       {% endfor %}

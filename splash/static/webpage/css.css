@@ -6,7 +6,7 @@
   color: white;
 }
 .stemma {
-  height: 75px;
+  height: 150px;
 }
 
 .header{
@@ -30,4 +30,12 @@
 
 .newlinebadge {
     white-space: collapse;
+}
+
+h1 {
+  font-family: 'Titillium Web';
+}
+
+p {
+  font-family: 'Titillium Web';
 }
