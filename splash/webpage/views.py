@@ -99,7 +99,7 @@ def home(request):
             first_open=Subquery(
                 models.Orario.objects.filter(
                     fkufficio=OuterRef('pkid'), 
-                    day_of_week__lt=day_of_week
+                    day_of_week__lt=day_of_week+1
                 ).order_by('day_of_week', 'time_start').values('pkid')[:1]
             )
         ).values('first_open')
