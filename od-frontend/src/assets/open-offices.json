@@ -1,0 +1,17 @@
+[
+  {
+    "ufficio": "Anagrafe",
+    "stato": "Aperto",
+    "colore": "success"
+  },
+  {
+    "ufficio": "Tecnico",
+    "stato": "Chiuso",
+    "colore": "danger"
+  },
+  {
+    "ufficio": "Ragioneria",
+    "stato": "Chiude tra 1 minuti",
+    "colore": "success"
+  }
+]
