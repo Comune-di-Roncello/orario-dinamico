@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import OpenOffice from '@/components/OpenOffice.vue'
 import { openOffices } from '@/stores/counter';
-import { setInterval } from 'timers/promises';
 import { onBeforeUnmount, onMounted } from 'vue';
 
 const store = openOffices()
 
-let intervalId;
+let intervalId: NodeJS.Timeout;
+
 function getNewJson() {
   intervalId = setTimeout(() => getNewJson(), 2000)
-  return store.getJson()
+  return intervalId
 }
 
 onMounted(() => {
-  intervalId = setTimeout(() => getNewJson(), 2000)
+  intervalId = getNewJson()
 });
 
 onBeforeUnmount(() => {
