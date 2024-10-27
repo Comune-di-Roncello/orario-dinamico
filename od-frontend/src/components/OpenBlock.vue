@@ -9,6 +9,7 @@ let intervalId: NodeJS.Timeout;
 
 function getNewJson() {
   intervalId = setTimeout(() => getNewJson(), 2000)
+  store.getJson()
   return intervalId
 }
 
