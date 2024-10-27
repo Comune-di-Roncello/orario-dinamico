@@ -20,8 +20,6 @@ export const openOffices = defineStore('openOffices', {
         .then((response) => response.json())
         .then((data) => (this.openNow = data as OfficeInfo[]))
         .catch((error) => console.log(error));
-
-      console.log(( this.openNow ))
     }
 
   }
