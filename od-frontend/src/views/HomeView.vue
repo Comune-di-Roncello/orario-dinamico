@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import OpenBlock from '@/components/OpenBlock.vue';
+import OpenBlock from '@/components/OpeningBlock.vue';
 </script>
 
 <template>
   <main>
-    <OpenBlock></OpenBlock>
+    <OpenBlock>Uffici ora aperti al pubblico</OpenBlock>
   </main>
 </template>
