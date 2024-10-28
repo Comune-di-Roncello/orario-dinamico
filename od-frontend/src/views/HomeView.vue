@@ -8,7 +8,7 @@ const store = openOffices()
 let intervalId: NodeJS.Timeout;
 
 function getNewJson() {
-  intervalId = setTimeout(() => getNewJson(), 2000)
+  intervalId = setTimeout(() => getNewJson(), 1000)
   store.getJson()
   return intervalId
 }
