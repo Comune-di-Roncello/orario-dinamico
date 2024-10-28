@@ -1,17 +1,17 @@
 [
   {
-    "ufficio": "Anagrafe",
-    "stato": "Aperto",
-    "colore": "success"
+    "name": "Anagrafe",
+    "text": "Aperto",
+    "status": "success"
   },
   {
-    "ufficio": "Tecnico",
-    "stato": "Chiuso",
-    "colore": "danger"
+    "name": "Tecnico",
+    "text": "Chiuso",
+    "status": "danger"
   },
   {
-    "ufficio": "Ragioneria",
-    "stato": "Chiude tra 1 minuti",
-    "colore": "success"
+    "name": "Ragioneria",
+    "text": "Chiude tra 1 minuti",
+    "status": "success"
   }
 ]
