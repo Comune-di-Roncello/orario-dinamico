@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import OpenOffice from '@/components/TimetableBlock.vue'
-import { type OutputEvent } from '@/stores/counter';
+import { type Event } from '@/stores/counter';
 
 defineProps({
-  slots: Array<OutputEvent>,
+  slots: Array<Event>,
 })
 
 </script>
@@ -17,8 +17,8 @@ defineProps({
     </h1>
     <div class="container">
       <template v-for="item in slots" v-bind:key="item.ufficio">
-        <OpenOffice :buttonvariant="item.status" :ufficio=item.name>
-          {{ item.text }}
+        <OpenOffice :buttonvariant=item.type :ufficio=item.subject>
+          {{ item.subject }}
         </OpenOffice>
       </template>
     </div>

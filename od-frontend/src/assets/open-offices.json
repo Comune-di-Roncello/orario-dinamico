@@ -1,17 +1,69 @@
-[
-  {
-    "name": "Anagrafe",
-    "text": "Aperto",
-    "status": "success"
-  },
-  {
-    "name": "Tecnico",
-    "text": "Chiuso",
-    "status": "danger"
-  },
-  {
-    "name": "Ragioneria",
-    "text": "Chiude tra 1 minuti",
-    "status": "success"
-  }
-]
+{
+    "today": [
+        {
+            "id": "AAMkAGFhYTNmNzY5LTk4ZDAtNDJhOS1iNTQ1LTc0YTg4ZmMyNmM0MABGAAAAAADqBwgLoYj8Q54CvGdDHQvxBwCPOXu4ZzGCQanMwGhAsAkKAABEDvtHAACPOXu4ZzGCQanMwGhAsAkKAABFHHPsAAA=",
+            "createdDateTime": "2024-10-28T20:21:06.674592Z",
+            "lastModifiedDateTime": "2024-10-28T20:21:07.724225Z",
+            "originalStartTimeZone": "W. Europe Standard Time",
+            "originalEndTimeZone": "W. Europe Standard Time",
+            "subject": "Puppa",
+            "bodyPreview": "",
+            "isCancelled": false,
+            "showAs": "busy",
+            "type": "singleInstance",
+            "occurrenceId": null,
+            "body": {
+                "contentType": "html",
+                "content": ""
+            },
+            "start": "2024-10-28T21:00:00",
+            "end": "2024-10-28T22:30:00",
+            "recurrence": null,
+            "attendees": []
+        }
+    ],
+    "later": [
+        {
+            "id": "AAMkAGFhYTNmNzY5LTk4ZDAtNDJhOS1iNTQ1LTc0YTg4ZmMyNmM0MABGAAAAAADqBwgLoYj8Q54CvGdDHQvxBwCPOXu4ZzGCQanMwGhAsAkKAABEDvtHAACPOXu4ZzGCQanMwGhAsAkKAABEDzorAAA=",
+            "createdDateTime": "2024-10-27T17:36:32.711928Z",
+            "lastModifiedDateTime": "2024-10-27T17:36:37.852058Z",
+            "originalStartTimeZone": "W. Europe Standard Time",
+            "originalEndTimeZone": "W. Europe Standard Time",
+            "subject": "Ufficio Tecnico",
+            "bodyPreview": "",
+            "isCancelled": false,
+            "showAs": "busy",
+            "type": "singleInstance",
+            "occurrenceId": null,
+            "body": {
+                "contentType": "html",
+                "content": ""
+            },
+            "start": "2024-10-29T13:00:00",
+            "end": "2024-10-29T15:45:00",
+            "recurrence": null,
+            "attendees": []
+        },
+        {
+            "id": "AAMkAGFhYTNmNzY5LTk4ZDAtNDJhOS1iNTQ1LTc0YTg4ZmMyNmM0MABGAAAAAADqBwgLoYj8Q54CvGdDHQvxBwCPOXu4ZzGCQanMwGhAsAkKAABEDvtHAACPOXu4ZzGCQanMwGhAsAkKAABEDzoqAAA=",
+            "createdDateTime": "2024-10-27T17:36:24.909950Z",
+            "lastModifiedDateTime": "2024-10-27T17:36:29.914976Z",
+            "originalStartTimeZone": "W. Europe Standard Time",
+            "originalEndTimeZone": "W. Europe Standard Time",
+            "subject": "Ufficio Anagrafe",
+            "bodyPreview": "",
+            "isCancelled": false,
+            "showAs": "busy",
+            "type": "singleInstance",
+            "occurrenceId": null,
+            "body": {
+                "contentType": "html",
+                "content": ""
+            },
+            "start": "2024-10-29T09:45:00",
+            "end": "2024-10-29T11:30:00",
+            "recurrence": null,
+            "attendees": []
+        }
+    ]
+}

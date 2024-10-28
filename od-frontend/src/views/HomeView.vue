@@ -24,7 +24,7 @@ onBeforeUnmount(() => {
 
 <template>
   <main>
-    <OpenBlock :slots=store.openNow>Uffici ora aperti al pubblico</OpenBlock>
+    <OpenBlock :slots=store.today>Uffici ora aperti al pubblico</OpenBlock>
     <OpenBlock :slots=store.later>Prossime aperture</OpenBlock>
   </main>
 </template>
