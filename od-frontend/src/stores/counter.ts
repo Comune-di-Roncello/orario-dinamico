@@ -31,15 +31,10 @@ export class Event {
   }
 }
 
-export interface OutlookEvents {
-  today: Array<Event>
-  later: Array<Event>
-}
-
 export const openOffices = defineStore('openOffices', {
   state: () => ({
-    today: [] as Event[],
-    later: [] as Event[]
+    today: [] as OutputEvent[],
+    later: [] as OutputEvent[]
   }),
   actions: {
     getJson() {
@@ -50,12 +45,12 @@ export const openOffices = defineStore('openOffices', {
         .then(data => {
           this.today = []
           data.today.forEach((element: Event) => {
-            this.today.push(element)
+            this.today.push(this.calculateEvent(element))
           });
 
           this.later = []
           data.later.forEach((element: Event) => {
-            this.later.push(element)
+            this.later.push(this.calculateEvent(element))
           });
 
         })
@@ -65,5 +60,14 @@ export const openOffices = defineStore('openOffices', {
         })
 
     },
+    calculateEvent(event: Event){
+      return {
+        name: "antani",
+        text: "scappellamento",
+        status: "success"
+
+      } as OutputEvent
+
+    }
   },
 })
