@@ -77,8 +77,8 @@ def main():
     endtime = now + timedelta(days=15)
 
     # Get events for next 7 days
-    r = cred.get(f"https://graph.microsoft.com/v1.0/users/{user_id}/calendars/{calendar_id}/events",
-                 params={"StartDateTime": now.isoformat(), "EndDateTime": endtime.isoformat()})
+    r = cred.get(f"https://graph.microsoft.com/v1.0/users/{user_id}/calendars/{calendar_id}/calendarView",
+                 params={"startDateTime": now.astimezone().replace(microsecond=0).isoformat(), "endDateTime": endtime.astimezone().replace(microsecond=0).isoformat()})
     
     assert r.ok
 
