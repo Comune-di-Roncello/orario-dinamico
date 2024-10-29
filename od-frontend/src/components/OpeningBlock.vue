@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import OpenOffice from '@/components/TimetableBlock.vue'
-import { type OutputEvent } from '@/stores/counter';
+import { type OutputEvent } from '@/stores/calendarmanager';
 
 defineProps({
   slots: Array<OutputEvent>,

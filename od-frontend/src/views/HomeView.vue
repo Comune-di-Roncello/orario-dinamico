@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import OpenBlock from '@/components/OpeningBlock.vue';
-import { openOffices } from '@/stores/counter';
+import { openOffices } from '@/stores/calendarmanager';
 import { onBeforeUnmount, onMounted } from 'vue';
 
 const store = openOffices()
