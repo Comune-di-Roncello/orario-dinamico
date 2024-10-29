@@ -2,8 +2,8 @@
 import { BButton, type ButtonVariant } from 'bootstrap-vue-next';
 
 defineProps<{
-  buttonvariant?: (ButtonVariant) | null,
-  ufficio?: string
+  buttonvariant: (ButtonVariant) | null,
+  ufficio: string
 }>()
 
 </script>
