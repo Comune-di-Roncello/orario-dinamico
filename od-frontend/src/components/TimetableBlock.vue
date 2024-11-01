@@ -10,7 +10,7 @@ interface OnScreenEvent {
   name: string
   text: string
   buttontype: ButtonVariant | null
-  hidden: boolean
+  visible: boolean
 }
 
 const props = defineProps<{
@@ -21,7 +21,7 @@ const ose = ref({
   name: props.outlookevent.name,
   text: '',
   buttontype: 'info',
-  hidden: false,
+  visible: true,
 } as OnScreenEvent)
 
 let intervalId: NodeJS.Timeout
@@ -31,11 +31,13 @@ function updateOSE() {
   const thisevent = props.outlookevent
 
   if (thisevent.begin > thisevent.end.endOf('day')) {
-    ose.value.text = thisevent.begin.setLocale('it-IT').toFormat('ccc d LLL, H:mm')
+    ose.value.text = thisevent.begin
+      .setLocale('it-IT')
+      .toFormat('ccc d LLL, H:mm')
   } else {
     if (thisevent.end.plus({ minutes: 10 }) < now) {
       //Already over by over 10 min
-      ose.value.hidden = true
+      ose.value.visible = false
     } else if (thisevent.end < now) {
       //Over
       ose.value.buttontype = 'danger'
@@ -72,7 +74,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="row py-2 align-items-center">
+  <div class="row py-2 align-items-center" v-if="ose.visible">
     <div class="col-7">
       <h1 class="display-3">{{ ose.name }}</h1>
     </div>
