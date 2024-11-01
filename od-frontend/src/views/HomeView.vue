@@ -13,7 +13,7 @@ onMounted(() => {
 <template>
   <main>
     <OpenBlock :outlookevent="store.today">
-      <template v-slot:open>Uffici ora aperti al pubblico</template>
+      <template v-slot:open>Uffici oggi aperti al pubblico</template>
       <template v-slot:closed
         >Tutti gli uffici sono chiusi al pubblico</template
       >
