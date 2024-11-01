@@ -13,6 +13,10 @@ interface OnScreenEvent {
   visible: boolean
 }
 
+const hide_after_min = 10
+const warn_before_min = 15
+const countdown_to_open_min = 10
+
 const props = defineProps<{
   outlookevent: OutlookEvent
 }>()
@@ -35,14 +39,14 @@ function updateOSE() {
       .setLocale('it-IT')
       .toFormat('ccc d LLL, H:mm')
   } else {
-    if (thisevent.end.plus({ minutes: 10 }) < now) {
+    if (thisevent.end.plus({ minutes: hide_after_min }) < now) {
       //Already over by over 10 min
       ose.value.visible = false
     } else if (thisevent.end < now) {
       //Over
       ose.value.buttontype = 'danger'
       ose.value.text = 'Chiuso'
-    } else if (thisevent.end.minus({ minutes: 15 }) < now) {
+    } else if (thisevent.end.minus({ minutes: warn_before_min }) < now) {
       // About to end
       ose.value.buttontype = 'warning'
       ose.value.text =
@@ -51,7 +55,7 @@ function updateOSE() {
       //open
       ose.value.buttontype = 'success'
       ose.value.text = 'Aperto fino alle ' + thisevent.end.toFormat('H:mm')
-    } else if (thisevent.begin.minus({ minutes: 15 }) < now) {
+    } else if (thisevent.begin.minus({ minutes: countdown_to_open_min }) < now) {
       // Hasn't started yet
       ose.value.buttontype = 'primary'
       ose.value.text =
