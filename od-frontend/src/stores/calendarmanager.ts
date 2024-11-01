@@ -68,11 +68,15 @@ export const calendarManager = defineStore('openOffices', {
         'Europe/Rome',
       )
 
+      if (DateTime.now().diff(end, ['minutes']).minutes >= 10) {
+        return
+      }
+
       return {
         id: event.id,
         name: event.subject,
         begin: begin,
-        end: end
+        end: end,
       } as OutlookEvent
     },
   },
