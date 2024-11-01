@@ -86,7 +86,13 @@ function updateOSE() {
       intervalId = setTimeout(() => updateOSE(), millis)
     } else {
       ose.value.buttontype = 'info'
-      ose.value.text = 'Apre alle ' + thisevent.begin.toFormat('H:mm')
+      if (thisevent.begin < now.endOf('day')){
+        ose.value.text = 'Apre alle ' + thisevent.begin.toFormat('H:mm')
+      } else if (thisevent.begin < now.endOf('day').plus({'hours': 24})){
+        ose.value.text = 'Apre domani alle ' + thisevent.begin.toFormat('H:mm')
+      } else {
+        ose.value.text = `Apre ${thisevent.begin.setLocale("it-it").toFormat('cccc d')} alle ${thisevent.begin.toFormat("H:mm")}`
+      }
 
       // Callback to countdown_to_open min
       millis = thisevent.begin
