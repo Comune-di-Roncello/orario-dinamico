@@ -1,13 +1,7 @@
 <script setup lang="ts">
 import OpenBlock from '@/components/OpeningBlock.vue'
 import { DateTime } from 'luxon'
-
-export interface OutlookEvent {
-  id: string
-  name: string
-  begin: DateTime
-  end: DateTime
-}
+import { type OutlookEvent } from '@/stores/calendarmanager';
 
 const store = {
   today: [

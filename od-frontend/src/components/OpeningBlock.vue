@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { defineProps } from 'vue'
 import OpenOffice from '@/components/TimetableBlock.vue'
-import { type OutlookEvent } from '@/views/HomeView.vue'
+import { type OutlookEvent } from '@/stores/calendarmanager';
 
 const props = defineProps<{
   outlookevent: Array<OutlookEvent>

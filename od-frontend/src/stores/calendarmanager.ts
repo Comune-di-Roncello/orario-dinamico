@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
-import { type ButtonVariant } from 'bootstrap-vue-next'
 import { DateTime } from 'luxon'
 
-export interface OutputEvent {
+export interface OutlookEvent {
+  id: string
   name: string
-  text: string
-  status: ButtonVariant | null
+  begin: DateTime
+  end: DateTime
 }
 
 export interface Event {
@@ -29,8 +29,8 @@ export interface Event {
 
 export const openOffices = defineStore('openOffices', {
   state: () => ({
-    today: [] as OutputEvent[],
-    later: [] as OutputEvent[],
+    today: [] as OutlookEvent[],
+    later: [] as OutlookEvent[],
   }),
   actions: {
     getJson() {
@@ -67,43 +67,13 @@ export const openOffices = defineStore('openOffices', {
       const end = DateTime.fromISO(event.end, { zone: 'UTC' }).setZone(
         'Europe/Rome',
       )
-      const now = DateTime.now()
-      let status = 'info'
-      let text = ''
-
-      if (begin > now.endOf('day')) {
-        text = begin.setLocale('it-IT').toFormat('ccc d LLL, H:mm')
-      } else {
-        if (end.plus({ minutes: 10 }) < now) {
-          //Already over by over 10 min
-          return null
-        } else if (end < now) {
-          //Over
-          status = 'danger'
-          text = 'Chiuso'
-        } else if (end.minus({ minutes: 15 }) < now) {
-          // About to end
-          status = 'warning'
-          text = 'Chiude tra ' + end.diff(now).toFormat('m') + ' minuti'
-        } else if (begin < now) {
-          //open
-          status = 'success'
-          text = 'Aperto fino alle ' + end.toFormat('H:mm')
-        } else if (begin.minus({ minutes: 15 }) < now) {
-          // Hasn't started yet
-          status = 'primary'
-          text = 'Apre tra ' + begin.diff(now).toFormat('m:ss') + ' minuti'
-        } else {
-          status = 'info'
-          text = 'Apre alle ' + begin.toFormat('H:mm')
-        }
-      }
 
       return {
+        id: event.id,
         name: event.subject,
-        text: text,
-        status: status,
-      } as OutputEvent
+        begin: begin,
+        end: end
+      } as OutlookEvent
     },
   },
 })

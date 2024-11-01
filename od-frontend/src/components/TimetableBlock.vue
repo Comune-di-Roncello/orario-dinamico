@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { BButton, type ButtonVariant } from 'bootstrap-vue-next'
-import { type OutlookEvent } from '@/views/HomeView.vue'
+import { type OutlookEvent } from '@/stores/calendarmanager';
 import { onBeforeUnmount, onBeforeMount } from 'vue'
 import { DateTime } from 'luxon'
 import { ref } from 'vue'
