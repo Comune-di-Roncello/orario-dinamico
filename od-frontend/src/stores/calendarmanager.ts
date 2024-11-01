@@ -27,7 +27,7 @@ export interface Event {
   attendees: Array<string>
 }
 
-export const openOffices = defineStore('openOffices', {
+export const calendarManager = defineStore('openOffices', {
   state: () => ({
     today: [] as OutlookEvent[],
     later: [] as OutlookEvent[],
