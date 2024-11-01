@@ -1,25 +1,24 @@
 <script setup lang="ts">
 import OpenBlock from '@/components/OpeningBlock.vue';
 import { openOffices } from '@/stores/calendarmanager';
-import { onBeforeUnmount, onMounted } from 'vue';
 
 const store = openOffices()
 
-let intervalId: NodeJS.Timeout;
+// let intervalId: NodeJS.Timeout;
 
-function getNewJson() {
-  intervalId = setTimeout(() => getNewJson(), 1800000) // 30 minutes
-  store.getJson()
-  return intervalId
-}
+// function getNewJson() {
+//   intervalId = setTimeout(() => getNewJson(), 1000)
+//   store.getJson()
+//   return intervalId
+// }
 
-onMounted(() => {
-  intervalId = getNewJson()
-});
+// onMounted(() => {
+//   intervalId = getNewJson()
+// });
 
-onBeforeUnmount(() => {
-  clearInterval(intervalId);
-})
+// onBeforeUnmount(() => {
+//   clearInterval(intervalId);
+// })
 </script>
 
 <template>
