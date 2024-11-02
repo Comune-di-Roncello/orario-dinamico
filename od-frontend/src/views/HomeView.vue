@@ -1,12 +1,24 @@
 <script setup lang="ts">
 import OpenBlock from '@/components/OpeningBlock.vue'
 import { calendarManager } from '@/stores/calendarmanager'
-import { onMounted } from 'vue'
+import { onMounted, onBeforeUnmount } from 'vue'
 
 const store = calendarManager()
+let timeoutId: NodeJS.Timeout
+
+function refreshjson(){
+  store.getJson()
+  timeoutId = setTimeout(refreshjson, store.nextRefreshMillis)
+  console.log('Set timeout for %d millis', store.nextRefreshMillis)
+
+}
 
 onMounted(() => {
-  store.getJson()
+  refreshjson()
+})
+
+onBeforeUnmount(() => {
+  clearInterval(timeoutId)
 })
 </script>
 

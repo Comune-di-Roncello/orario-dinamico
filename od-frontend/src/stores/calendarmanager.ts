@@ -1,12 +1,6 @@
 import { defineStore } from 'pinia'
 import { DateTime } from 'luxon'
-
-export interface OutlookEvent {
-  id: string
-  name: string
-  begin: DateTime
-  end: DateTime
-}
+import { type ButtonVariant } from 'bootstrap-vue-next'
 
 export interface Event {
   id: string
@@ -27,10 +21,21 @@ export interface Event {
   attendees: Array<string>
 }
 
+export interface OnScreenEvent {
+  name: string
+  text: string
+  buttontype: ButtonVariant | null
+}
+
+const hide_after_min = 10
+const warn_before_min = 15
+const countdown_to_open_min = 10
+
 export const calendarManager = defineStore('openOffices', {
   state: () => ({
-    today: [] as OutlookEvent[],
-    later: [] as OutlookEvent[],
+    today: {} as Record<string, OnScreenEvent>,
+    later: {} as Record<string, OnScreenEvent>,
+    nextRefreshMillis: 1000,
   }),
   actions: {
     getJson() {
@@ -39,21 +44,30 @@ export const calendarManager = defineStore('openOffices', {
       fetch(url)
         .then(response => response.json())
         .then(data => {
-          this.today = []
+          const nextRefreshes = [] as Array<number>
           data.today.forEach((element: Event) => {
             const outevent = this.calculateEvent(element)
-            if (outevent != null) {
-              this.today.push(outevent)
+
+            if (!outevent) {
+              delete this.today[element.id]
+            } else {
+              this.today[outevent.id] = outevent.event
+              nextRefreshes.push(outevent.nextRefresh)
             }
           })
 
-          this.later = []
           data.later.forEach((element: Event) => {
             const outevent = this.calculateEvent(element)
-            if (outevent != null) {
-              this.later.push(outevent)
+
+            if (!outevent) {
+              delete this.later[element.id]
+            } else {
+              this.today[outevent.id] = outevent.event
+              nextRefreshes.push(outevent.nextRefresh)
             }
           })
+
+          this.nextRefreshMillis = Math.min(...nextRefreshes)
         })
         .catch(error => {
           console.log(error)
@@ -67,17 +81,84 @@ export const calendarManager = defineStore('openOffices', {
       const end = DateTime.fromISO(event.end, { zone: 'UTC' }).setZone(
         'Europe/Rome',
       )
+      const now = DateTime.now()
 
       if (DateTime.now().diff(end, ['minutes']).minutes >= 10) {
         return
       }
 
+      const ose = {
+        name: event.subject,
+        text: '',
+        buttontype: 'info',
+      } as OnScreenEvent
+      let millis = 1000
+
+      if (begin > end.endOf('day')) {
+        ose.text = begin.setLocale('it-IT').toFormat('ccc d LLL, H:mm')
+        millis = now.endOf('day').diff(now, ['milliseconds']).milliseconds
+      } else {
+        if (end.plus({ minutes: hide_after_min }) < now) {
+          //Already over by over 10 min
+          return
+        }
+
+        if (end < now) {
+          //Over
+          ose.buttontype = 'danger'
+          ose.text = 'Chiuso'
+
+          //Callback to 10 min after close
+          millis = end
+            .plus({ minutes: hide_after_min, seconds: 10 })
+            .diff(now).milliseconds
+        } else if (end.minus({ minutes: warn_before_min }) < now) {
+          // About to end
+          ose.buttontype = 'warning'
+          ose.text = 'Chiude tra ' + end.diff(now).toFormat('m') + ' minuti'
+
+          // Callback at :00 of the next minute
+          millis = now.endOf('minute').diff(now).milliseconds
+        } else if (begin < now) {
+          //open
+          ose.buttontype = 'success'
+          ose.text = 'Aperto fino alle ' + end.toFormat('H:mm')
+
+          // Callback at 14 minutes and 50 seconds before end
+          millis = end
+            .minus({ minutes: warn_before_min })
+            .plus({ seconds: 5 })
+            .diff(now).milliseconds
+        } else if (begin.minus({ minutes: countdown_to_open_min }) < now) {
+          // Hasn't started yet
+          ose.buttontype = 'primary'
+          ose.text = 'Apre tra ' + begin.diff(now).toFormat('m:ss') + ' minuti'
+
+          // Callback in 1 second
+          millis = 1000
+        } else {
+          ose.buttontype = 'info'
+          if (begin < now.endOf('day')) {
+            ose.text = 'Apre alle ' + begin.toFormat('H:mm')
+          } else if (begin < now.endOf('day').plus({ hours: 24 })) {
+            ose.text = 'Apre domani alle ' + begin.toFormat('H:mm')
+          } else {
+            ose.text = `Apre ${begin.setLocale('it-it').toFormat('cccc d')} alle ${begin.toFormat('H:mm')}`
+          }
+
+          // Callback to countdown_to_open min
+          millis = begin
+            .minus({ minutes: countdown_to_open_min })
+            .plus({ seconds: 5 })
+            .diff(now).milliseconds
+        }
+      }
+
       return {
         id: event.id,
-        name: event.subject,
-        begin: begin,
-        end: end,
-      } as OutlookEvent
+        nextRefresh: millis,
+        event: ose,
+      }
     },
   },
 })
