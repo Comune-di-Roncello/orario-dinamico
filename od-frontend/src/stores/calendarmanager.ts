@@ -38,10 +38,10 @@ export const calendarManager = defineStore('openOffices', {
     nextRefreshMillis: 1000,
   }),
   actions: {
-    getJson() {
+    async getJson() {
       const url = '/src/assets/open-offices.json'
 
-      fetch(url)
+      await fetch(url)
         .then(response => response.json())
         .then(data => {
           const nextRefreshes = [] as Array<number>
@@ -62,10 +62,11 @@ export const calendarManager = defineStore('openOffices', {
             if (!outevent) {
               delete this.later[element.id]
             } else {
-              this.today[outevent.id] = outevent.event
+              this.later[outevent.id] = outevent.event
               nextRefreshes.push(outevent.nextRefresh)
             }
           })
+          console.log(nextRefreshes)
 
           this.nextRefreshMillis = Math.min(...nextRefreshes)
         })
@@ -102,7 +103,6 @@ export const calendarManager = defineStore('openOffices', {
           //Already over by over 10 min
           return
         }
-
         if (end < now) {
           //Over
           ose.buttontype = 'danger'
@@ -114,8 +114,19 @@ export const calendarManager = defineStore('openOffices', {
             .diff(now).milliseconds
         } else if (end.minus({ minutes: warn_before_min }) < now) {
           // About to end
-          ose.buttontype = 'warning'
-          ose.text = 'Chiude tra ' + end.diff(now).toFormat('m') + ' minuti'
+          const minutes_left = end.diff(now).minutes
+
+          if (minutes_left < 5) {
+            ose.buttontype = 'danger'
+          } else {
+            ose.buttontype = 'warning'
+          }
+
+          if (minutes_left == 0) {
+            ose.text = 'Chiude tra < 1 minuto'
+          } else {
+            ose.text = `Chiude tra ${minutes_left} minuti`
+          }
 
           // Callback at :00 of the next minute
           millis = now.endOf('minute').diff(now).milliseconds
@@ -135,7 +146,7 @@ export const calendarManager = defineStore('openOffices', {
           ose.text = 'Apre tra ' + begin.diff(now).toFormat('m:ss') + ' minuti'
 
           // Callback in 1 second
-          millis = 1000
+          millis = now.endOf('second').diff(now, ['milliseconds']).milliseconds
         } else {
           ose.buttontype = 'info'
           if (begin < now.endOf('day')) {

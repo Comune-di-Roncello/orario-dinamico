@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import OpenBlock from '@/components/OpeningBlock.vue'
 import { calendarManager } from '@/stores/calendarmanager'
+import { storeToRefs } from 'pinia'
 import { onMounted, onBeforeUnmount } from 'vue'
 
 const store = calendarManager()
+const { today, later, nextRefreshMillis } = storeToRefs(store)
+
 let timeoutId: NodeJS.Timeout
 
-function refreshjson(){
-  store.getJson()
-  timeoutId = setTimeout(refreshjson, store.nextRefreshMillis)
-  console.log('Set timeout for %d millis', store.nextRefreshMillis)
-
+function refreshjson() {
+  console.log('refresh!')
+  store.getJson().then(() => {
+    setTimeout(refreshjson, nextRefreshMillis.value)
+  })
 }
 
 onMounted(() => {
@@ -24,13 +27,13 @@ onBeforeUnmount(() => {
 
 <template>
   <main>
-    <OpenBlock :outlookevent="store.today">
+    <OpenBlock :outlookevent="today">
       <template v-slot:open>Uffici oggi aperti al pubblico</template>
       <template v-slot:closed
         >Tutti gli uffici sono chiusi al pubblico</template
       >
     </OpenBlock>
-    <OpenBlock :outlookevent="store.later">
+    <OpenBlock :outlookevent="later">
       <template v-slot:open>Prossime aperture</template>
       <template v-slot:closed>Dati temporaneamente non disponibili</template>
     </OpenBlock>
