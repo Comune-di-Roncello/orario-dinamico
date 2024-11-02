@@ -33,6 +33,10 @@ const countdown_to_open_min = 10
 
 export const calendarManager = defineStore('openOffices', {
   state: () => ({
+    azurejson: {
+      today: [] as Array<Event>,
+      later: [] as Array<Event>,
+    },
     today: {} as Record<string, OnScreenEvent>,
     later: {} as Record<string, OnScreenEvent>,
     nextRefreshMillis: 1000,
@@ -43,37 +47,38 @@ export const calendarManager = defineStore('openOffices', {
 
       await fetch(url)
         .then(response => response.json())
-        .then(data => {
-          const nextRefreshes = [] as Array<number>
-          data.today.forEach((element: Event) => {
-            const outevent = this.calculateEvent(element)
-
-            if (!outevent) {
-              delete this.today[element.id]
-            } else {
-              this.today[outevent.id] = outevent.event
-              nextRefreshes.push(outevent.nextRefresh)
-            }
-          })
-
-          data.later.forEach((element: Event) => {
-            const outevent = this.calculateEvent(element)
-
-            if (!outevent) {
-              delete this.later[element.id]
-            } else {
-              this.later[outevent.id] = outevent.event
-              nextRefreshes.push(outevent.nextRefresh)
-            }
-          })
-          console.log(nextRefreshes)
-
-          this.nextRefreshMillis = Math.min(...nextRefreshes)
-        })
+        .then(data => (this.azurejson = data))
         .catch(error => {
           console.log(error)
           return
         })
+    },
+    refreshData() {
+      const nextRefreshes = [] as Array<number>
+      this.azurejson.today.forEach((element: Event) => {
+        const outevent = this.calculateEvent(element)
+
+        if (!outevent) {
+          delete this.today[element.id]
+        } else {
+          this.today[outevent.id] = outevent.event
+          nextRefreshes.push(outevent.nextRefresh)
+        }
+      })
+
+      this.azurejson.later.forEach((element: Event) => {
+        const outevent = this.calculateEvent(element)
+
+        if (!outevent) {
+          delete this.later[element.id]
+        } else {
+          this.later[outevent.id] = outevent.event
+          nextRefreshes.push(outevent.nextRefresh)
+        }
+      })
+      console.log(nextRefreshes)
+
+      this.nextRefreshMillis = Math.min(...nextRefreshes)
     },
     calculateEvent(event: Event) {
       const begin = DateTime.fromISO(event.start, { zone: 'UTC' }).setZone(

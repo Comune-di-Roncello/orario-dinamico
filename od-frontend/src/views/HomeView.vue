@@ -7,21 +7,32 @@ import { onMounted, onBeforeUnmount } from 'vue'
 const store = calendarManager()
 const { today, later, nextRefreshMillis } = storeToRefs(store)
 
-let timeoutId: NodeJS.Timeout
+let screenTimeoutId: NodeJS.Timeout
+let jsonTimeoutId: NodeJS.Timeout
 
-function refreshjson() {
+function refreshDataOnScreen() {
   console.log('refresh!')
+  store.refreshData()
+  screenTimeoutId = setTimeout(refreshDataOnScreen, nextRefreshMillis.value)
+}
+
+function refreshJsonData() {
+  console.log('refresh json')
   store.getJson().then(() => {
-    setTimeout(refreshjson, nextRefreshMillis.value)
+    clearInterval(screenTimeoutId)
+    refreshDataOnScreen()
   })
+  jsonTimeoutId = setTimeout(refreshJsonData, 5000)
 }
 
 onMounted(() => {
-  refreshjson()
+  refreshJsonData()
+  refreshDataOnScreen()
 })
 
 onBeforeUnmount(() => {
-  clearInterval(timeoutId)
+  clearInterval(screenTimeoutId)
+  clearInterval(jsonTimeoutId)
 })
 </script>
 
