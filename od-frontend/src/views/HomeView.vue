@@ -22,7 +22,7 @@ function refreshJsonData() {
     clearInterval(screenTimeoutId)
     refreshDataOnScreen()
   })
-  jsonTimeoutId = setTimeout(refreshJsonData, 5000)
+  jsonTimeoutId = setTimeout(refreshJsonData, 20*60*1000)
 }
 
 onMounted(() => {
