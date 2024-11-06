@@ -1,18 +1,19 @@
 # For simplicity, we'll read config file from 1st CLI param sys.argv[1]
 import os
-import json
 
 import requests
 import msal
 from typing import Any
 from datetime import datetime
-from datetime import date
 from datetime import timedelta
 
 from . import models
 
 # Optional logging
 # logging.basicConfig(level=logging.DEBUG)
+
+CALENDARNAME = os.getenv("CALENDARNAME")
+USERNAME = os.getenv("USERNAME")
 
 class O365Credentials(requests.Session):
     config = {
@@ -60,14 +61,14 @@ def main():
 
     # Get ID of User from which to access calendars
     # TODO: make reslient in case network is down, retry forever
-    r = cred.get("https://graph.microsoft.com/v1.0/users", params={"$filter": "userPrincipalName eq 'federico@ftabbo.onmicrosoft.com'"})
+    r = cred.get("https://graph.microsoft.com/v1.0/users", params={"$filter": f"userPrincipalName eq '{USERNAME}'"})
     assert r.ok
 
     filtered_users = r.json()
     user_id = filtered_users['value'][0]['id']
 
     # Get calendar ID
-    r = cred.get(f"https://graph.microsoft.com/v1.0/users/{user_id}/calendars", params={"$filter": "name eq 'Orari Apertura'"})
+    r = cred.get(f"https://graph.microsoft.com/v1.0/users/{user_id}/calendars", params={"$filter": f"name eq '{CALENDARNAME}'"})
     assert r.ok
 
     filtered_calendars = r.json()
