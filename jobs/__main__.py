@@ -15,6 +15,7 @@ from . import models
 CALENDARNAME = os.getenv("CALENDARNAME")
 USERNAME = os.getenv("USERNAME")
 
+
 class O365Credentials(requests.Session):
     config = {
         "authority": "https://login.microsoftonline.com/" + os.getenv("TENANT_ID"),
@@ -55,20 +56,14 @@ class O365Credentials(requests.Session):
         )
 
 
-
 def main():
     cred = O365Credentials()
 
-    # Get ID of User from which to access calendars
-    # TODO: make reslient in case network is down, retry forever
-    r = cred.get("https://graph.microsoft.com/v1.0/users", params={"$filter": f"userPrincipalName eq '{USERNAME}'"})
-    assert r.ok
-
-    filtered_users = r.json()
-    user_id = filtered_users['value'][0]['id']
+    user_id = os.getenv("USER_PKID")
 
     # Get calendar ID
-    r = cred.get(f"https://graph.microsoft.com/v1.0/users/{user_id}/calendars", params={"$filter": f"name eq '{CALENDARNAME}'"})
+    r = cred.get(f"https://graph.microsoft.com/v1.0/users/{
+                 user_id}/calendars", params={"$filter": f"name eq '{CALENDARNAME}'"})
     assert r.ok
 
     filtered_calendars = r.json()
@@ -80,12 +75,11 @@ def main():
     # Get events for next 7 days
     r = cred.get(f"https://graph.microsoft.com/v1.0/users/{user_id}/calendars/{calendar_id}/calendarView",
                  params={"startDateTime": now.astimezone().replace(microsecond=0).isoformat(), "endDateTime": endtime.astimezone().replace(microsecond=0).isoformat()})
-    
+
     assert r.ok
 
     outlookresponse = models.InputModel.model_validate(r.json())
     events = outlookresponse.value
-    
 
     # Now we need to find all events happening today
     happening_today = []
@@ -96,7 +90,6 @@ def main():
         if x.start.date() == today:
             happening_today.append(x)
 
-
     # Find set of names of events
     event_names = set()
     for x in events:
@@ -106,7 +99,8 @@ def main():
     happening_later = []
     for name in event_names:
         try:
-            happening_later.append(sorted([x for x in events if x.start.date() != today and x.subject == name], key=lambda d: d.start)[0])
+            happening_later.append(sorted([x for x in events if x.start.date(
+            ) != today and x.subject == name], key=lambda d: d.start)[0])
         except IndexError:
             # Probably the only event was today
             continue
@@ -116,11 +110,8 @@ def main():
         later=happening_later
     )
 
-    with open("output.json", "w") as outfile:
-        outfile.write(output.model_dump_json(indent=4))
+    print(output.model_dump_json(indent=4))
 
-    return happening_today, happening_later
-    
 
 if __name__ == '__main__':
     main()
