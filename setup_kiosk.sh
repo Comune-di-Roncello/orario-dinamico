@@ -27,7 +27,6 @@ sudo sed -i 's/#NAutoVTs=6/NAutoVTs=1/g' /etc/systemd/logind.conf
 sudo mkdir -p /etc/systemd/system/getty@tty1.service.d
 
 echo """[Service]
-ExecStart=
 ExecStart=-/sbin/agetty --autologin orario --noclear %I 38400 linux""" | sudo tee /etc/systemd/system/getty@tty1.service.d/override.conf
 
 echo "[[ -z \$DISPLAY && \$XDG_VTNR -eq 1 ]] && startx -- -nocursor" | sudo tee /home/orario/.bash_profile
