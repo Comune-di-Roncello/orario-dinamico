@@ -3,7 +3,7 @@
 
 # Inspiration taken from https://die-antwort.eu/techblog/2017-12-setup-raspberry-pi-for-kiosk-mode/
 
-
+sudo apt update
 sudo apt install --no-install-recommends xserver-xorg x11-xserver-utils xinit openbox
 sudo apt-get install --no-install-recommends firefox-esr
 sudo apt install nginx
