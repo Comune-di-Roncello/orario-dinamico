@@ -62,8 +62,8 @@ def main():
     user_id = os.getenv("USER_PKID")
 
     # Get calendar ID
-    r = cred.get(f"https://graph.microsoft.com/v1.0/users/{
-                 user_id}/calendars", params={"$filter": f"name eq '{CALENDARNAME}'"})
+    r = cred.get(f"https://graph.microsoft.com/v1.0/users/{user_id}/calendars",
+                 params={"$filter": f"name eq '{CALENDARNAME}'"})
     assert r.ok
 
     filtered_calendars = r.json()
@@ -74,7 +74,10 @@ def main():
 
     # Get events for next 7 days
     r = cred.get(f"https://graph.microsoft.com/v1.0/users/{user_id}/calendars/{calendar_id}/calendarView",
-                 params={"startDateTime": now.astimezone().replace(microsecond=0).isoformat(), "endDateTime": endtime.astimezone().replace(microsecond=0).isoformat()})
+                 params={
+                     "startDateTime": now.astimezone().replace(microsecond=0).isoformat(),
+                     "endDateTime": endtime.astimezone().replace(microsecond=0).isoformat()
+    })
 
     assert r.ok
 
