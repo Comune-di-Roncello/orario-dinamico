@@ -66,6 +66,19 @@ export const calendarManager = defineStore('openOffices', {
         }
       })
 
+      Object.keys(this.today).forEach(key => {
+        let found = false
+        this.azurejson.today.forEach((element: Event) => {
+          if (key == element.id) {
+            found = true
+          }
+        })
+
+        if (!found) {
+          delete this.today[key]
+        }
+      })
+
       this.azurejson.later.forEach((element: Event) => {
         const outevent = this.calculateEvent(element)
 
@@ -77,6 +90,19 @@ export const calendarManager = defineStore('openOffices', {
         }
       })
       console.log(nextRefreshes)
+
+      Object.keys(this.later).forEach(key => {
+        let found = false
+        this.azurejson.later.forEach((element: Event) => {
+          if (key == element.id) {
+            found = true
+          }
+        })
+
+        if (!found) {
+          delete this.later[key]
+        }
+      })
 
       this.nextRefreshMillis = Math.min(...nextRefreshes)
     },
