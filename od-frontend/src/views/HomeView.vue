@@ -1,14 +1,42 @@
 <script setup lang="ts">
 import OpenBlock from '@/components/OpeningBlock.vue'
 import { calendarManager } from '@/stores/calendarmanager'
-import { storeToRefs } from 'pinia'
-import { onMounted, onBeforeUnmount } from 'vue'
+import { onMounted, onBeforeUnmount, computed } from 'vue'
 
 const store = calendarManager()
-const { today, later, nextRefreshMillis } = storeToRefs(store)
 
 let screenTimeoutId: NodeJS.Timeout
 let jsonTimeoutId: NodeJS.Timeout
+
+const today = computed({
+  get() {
+    const out = []
+    for (const x of Object.entries(store.today)) {
+      out.push(x[1])
+    }
+
+    return out.sort((a, b) => a.startDate.diff(b.startDate, ['seconds']).seconds)
+  },
+  set() { }
+})
+
+const later = computed({
+  get() {
+    const out = []
+    for (const x of Object.entries(store.later)) {
+      out.push(x[1])
+    }
+
+    return out.sort((a, b) => a.startDate.diff(b.startDate, ['seconds']).seconds)
+  },
+  set() { }
+})
+
+const nextRefreshMillis = computed({
+  get() { return store.nextRefreshMillis },
+  set() { }
+})
+
 
 function refreshDataOnScreen() {
   console.log('refresh!')
@@ -22,7 +50,7 @@ function refreshJsonData() {
     clearInterval(screenTimeoutId)
     refreshDataOnScreen()
   })
-  jsonTimeoutId = setTimeout(refreshJsonData, 20*60*1000)
+  jsonTimeoutId = setTimeout(refreshJsonData, 20 * 60 * 1000)
 }
 
 onMounted(() => {
@@ -40,9 +68,7 @@ onBeforeUnmount(() => {
   <main>
     <OpenBlock :outlookevent="today">
       <template v-slot:open>Uffici oggi aperti al pubblico</template>
-      <template v-slot:closed
-        >Tutti gli uffici sono chiusi al pubblico</template
-      >
+      <template v-slot:closed>Tutti gli uffici sono chiusi al pubblico</template>
     </OpenBlock>
     <OpenBlock :outlookevent="later">
       <template v-slot:open>Prossime aperture</template>

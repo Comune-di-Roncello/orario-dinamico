@@ -25,6 +25,7 @@ export interface OnScreenEvent {
   name: string
   text: string
   buttontype: ButtonVariant | null
+  startDate: DateTime
 }
 
 const hide_after_min = 10
@@ -123,6 +124,7 @@ export const calendarManager = defineStore('openOffices', {
         name: event.subject,
         text: '',
         buttontype: 'info',
+        startDate: begin,
       } as OnScreenEvent
       let millis = 1000
 
