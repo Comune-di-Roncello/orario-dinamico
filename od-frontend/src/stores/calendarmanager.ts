@@ -145,7 +145,7 @@ export const calendarManager = defineStore('openOffices', {
             .diff(now).milliseconds
         } else if (end.minus({ minutes: warn_before_min }) < now) {
           // About to end
-          const minutes_left = end.diff(now).minutes
+          const minutes_left = Math.floor(end.diff(now, ['minutes']).minutes)
 
           if (minutes_left < 5) {
             ose.buttontype = 'danger'
